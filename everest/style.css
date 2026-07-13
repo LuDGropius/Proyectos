@@ -240,6 +240,47 @@ body {
   align-items: center;
   text-align: center;
   padding: 2rem;
+  overflow: hidden;
+}
+img{
+  max-width: 120px;
+  z-index: 1;
+  margin-bottom: 1rem;
+  @media (max-width: 576px) {
+    max-width: 80px;
+}
+}
+
+/* Silueta SVG del Everest: ocupa todo el viewport del intro,
+   anclada a la base. Los flancos son tan abiertos que la base
+   del SVG cubre toda la pantalla antes de llegar al fondo. */
+#everest-silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;       /* más ancho que el viewport para garantizar cobertura lateral */
+  height: 100%;      /* toda la altura del intro */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Canvas de nieve: fijo, siempre cayendo en toda la página */
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;        /* por encima del fondo, por debajo del contenido */
+}
+
+/* El texto del intro va por encima de la silueta y la nieve */
+#intro h1,
+#intro p,
+#scroll-hint {
+  position: relative;
+  z-index: 3;
 }
 
 #intro h1 {
@@ -263,7 +304,7 @@ body {
 
 #intro p {
   font-size: 0.95rem;
-  color: var(--muted);
+  color:white;
   max-width: 380px;
   line-height: 1.7;
   margin-bottom: 2rem;
@@ -552,7 +593,7 @@ body {
 }
 
 #end p {
-  color: var(--muted);
+  color: white;
   max-width: 380px;
   line-height: 1.6;
   font-size: 0.85rem;
@@ -563,6 +604,6 @@ body {
   display: block;
   margin-top: 1.5rem;
   font-size: 0.65rem;
-  color: rgba(90, 106, 126, 0.55);
+  color: white;
   letter-spacing: 0.05em;
 }

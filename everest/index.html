@@ -7,6 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<meta name="description"
+        content="Víctimas del monte Everest y sus alturas desplegadas a medida que se desciende por la página web.">
+        <meta name="keywords" content="Everest, monte everest, víctimas, montañismo">
+    <meta name="author" content="Aránzazu Bersaluce">
+    <link rel="icon" type="image/png" href="everest.png">
 </head>
 <body>
 
@@ -44,9 +49,49 @@
 </div>
 
 <!-- Contenido principal con scroll -->
+<!-- Canvas de nieve: fijo, cae en toda la página siempre -->
+<canvas id="snow-canvas" aria-hidden="true"></canvas>
+
 <div id="wrap">
 
   <div id="intro">
+    <!-- Silueta del Everest: cima estrecha, flancos tan abiertos que
+         cubren toda la pantalla antes de llegar a la base del SVG -->
+    <svg id="everest-silhouette" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="peak-gradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#f0f4f8" stop-opacity="0.95"/>
+          <stop offset="20%"  stop-color="#c8d8e8" stop-opacity="0.90"/>
+          <stop offset="55%"  stop-color="#3a4a5e" stop-opacity="0.92"/>
+          <stop offset="100%" stop-color="#0d1117" stop-opacity="1.0"/>
+        </linearGradient>
+      </defs>
+      <polygon
+        points="
+          -100,600
+          -100,440  0,410   60,390  120,395  160,370
+          200,350  220,360  240,338  260,345  272,320  280,328
+          288,308  295,316  302,295  310,303  318,282  326,292
+          334,270  342,280  352,258  364,268  378,244  394,255
+          412,230  432,242  454,216  478,228  504,200  530,214
+          556,185  576,198  594,170  610,182  624,155  638,168
+          650,140  662,153  672,126  682,140  692,112  702,128
+          712,98   722,115  732,84   742,102  752,70   762,88
+          772,56   782,74   792,42   802,60   812,28   822,46
+          832,14   842,34   852,8    858,22   864,4    870,0
+          876,4    882,18   890,8    902,28   914,12   928,36
+          940,18   954,44   966,28   978,56   990,38   1004,66
+          1016,48  1030,78  1044,60  1060,90  1078,72  1098,104
+          1120,84  1144,118 1168,98  1192,132 1216,112 1240,150
+          1262,130 1282,170 1300,148 1316,185 1330,162 1344,200
+          1356,176 1368,215 1380,238 1396,260 1412,282 1428,308
+          1444,332 1460,358 1480,390 1500,420 1540,440 1580,460
+          1580,600
+        "
+        fill="url(#peak-gradient)"
+      />
+    </svg>
+    <img src="ab.png" alt="Logo de Aránzazu Berasaluce" aria-hidden="true">
     <h1><em>Las víctimas del</em>Everest</h1>
     <p>8.849 m de montaña. Cada punto marca una vida perdida. Desciende para encontrarlas.</p>
     <div id="scroll-hint">Desciende</div>
@@ -77,7 +122,7 @@
   </div>
 </div>
 
-<script src="data.js"></script>
+<script src="loader.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

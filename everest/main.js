@@ -1,3 +1,14 @@
+/* =============================================
+   Mensaje
+   ============================================= */
+document.addEventListener('DOMContentLoaded', function() {
+  console.log(
+    '%cSolo puedes bajar por el Monte Everest a mano. No existen atajos seguros.',
+    'color:  #0A84FF; font-size: 24px; font-weight: bold;'
+  );
+});
+
+
 /* ============================================================
    EVEREST DEATHS — main.js
    Cada víctima es un punto distribuido en el eje X según su
@@ -435,6 +446,87 @@ function setupResize() {
 
 /* ---- Inicialización ------------------------------------------------ */
 
+/* ---- Nieve con parallax (toda la página, siempre activa) ----- */
+
+function setupSnow() {
+  const canvas = document.getElementById('snow-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // 3 capas a velocidades distintas crean sensación de profundidad:
+  // lentas = lejos, rápidas = cerca. El parallax se nota más al
+  // scrollear rápido hacia abajo.
+  const LAYERS = [
+    { count: 70,  speed: 0.25, size: 1.0, opacity: 0.30, parallax: 0.10 },
+    { count: 50,  speed: 0.65, size: 1.8, opacity: 0.50, parallax: 0.25 },
+    { count: 30,  speed: 1.20, size: 3.0, opacity: 0.70, parallax: 0.45 },
+  ];
+
+  let particles = [];
+  let lastScrollY = window.scrollY;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createParticle(layer, forceY = null) {
+    return {
+      x:        Math.random() * canvas.width,
+      y:        forceY !== null ? forceY : Math.random() * canvas.height,
+      speed:    layer.speed * (0.7 + Math.random() * 0.6),
+      drift:    (Math.random() - 0.5) * 0.35,
+      size:     layer.size  * (0.7 + Math.random() * 0.6),
+      opacity:  layer.opacity * (0.6 + Math.random() * 0.4),
+      parallax: layer.parallax,
+      layerRef: layer,
+    };
+  }
+
+  function initParticles() {
+    particles = [];
+    LAYERS.forEach(layer => {
+      for (let i = 0; i < layer.count; i++) {
+        particles.push(createParticle(layer));
+      }
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const scrollDelta = (window.scrollY - lastScrollY) * 0.4;
+    lastScrollY = window.scrollY;
+
+    for (const p of particles) {
+      p.y += p.speed + scrollDelta * p.parallax;
+      p.x += p.drift;
+
+      if (p.x < 0)             p.x = canvas.width;
+      if (p.x > canvas.width)  p.x = 0;
+      if (p.y > canvas.height + 4) {
+        Object.assign(p, createParticle(p.layerRef, -4));
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220, 235, 248, ${p.opacity})`;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  initParticles();
+  draw();
+
+  window.addEventListener('resize', () => {
+    resize();
+    initParticles();
+  }, { passive: true });
+}
+
 async function init() {
   const bar = document.getElementById('load-bar');
   const txt = document.getElementById('load-txt');
@@ -455,9 +547,15 @@ async function init() {
   setTimeout(() => document.getElementById('load').remove(), 600);
 
   drawBg();
+  setupSnow();
   setupScroll();
   setupModal();
   setupResize();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// main.js espera el evento 'victimsReady' que dispara loader.js
+// una vez que VICTIMS_DATA está disponible (caché local o Wikipedia).
+// Esto reemplaza el antiguo listener de DOMContentLoaded, que asumía
+// que los datos ya existían al cargarse la página (era válido con
+// data.js hardcodeado, pero no con loader.js async).
+document.addEventListener('victimsReady', init);
