@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muertes en el Everest — Descenso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Pantalla de carga -->
+<div id="load">
+  <div id="load-logo">8,849 m</div>
+  <div id="load-txt">Cargando víctimas…</div>
+  <div id="load-bar-w"><div id="load-bar"></div></div>
+</div>
+
+<!-- Barra de progreso lateral -->
+<div id="prog"></div>
+
+<!-- Fondo dinámico -->
+<canvas id="bgc"></canvas>
+
+<!-- HUD: altímetro y contador de víctimas -->
+<div id="hud">
+  <div id="death-counter">
+    <span id="death-count-num">0</span>
+    <span id="death-count-label">víctimas al pasar</span>
+  </div>
+  <div id="altimeter">
+    <div id="alt-value">8,849</div>
+    <div id="alt-label">metros sobre el nivel del mar</div>
+    <div id="zone-badge">Zona de la Muerte</div>
+  </div>
+</div>
+
+<!-- Filtro por nacionalidad -->
+<div id="filter-bar">
+  <select id="nationality-filter" aria-label="Filtrar por nacionalidad">
+    <option value="">Todas las nacionalidades</option>
+  </select>
+</div>
+
+<!-- Contenido principal con scroll -->
+<div id="wrap">
+
+  <div id="intro">
+    <h1><em>Las víctimas del</em>Everest</h1>
+    <p>8.849 m de montaña. Cada punto marca una vida perdida. Desciende para encontrarlas.</p>
+    <div id="scroll-hint">Desciende</div>
+  </div>
+
+  <div id="mtn">
+    <div id="center-line"></div>
+    <!-- Las marcas de víctimas y etiquetas de altitud se generan en main.js -->
+  </div>
+
+  <div id="end">
+    <h2>Campamento Base · 5.364 m</h2>
+    <div id="end-total">—</div>
+    <p>vidas documentadas perdidas en el Everest desde 1921.</p>
+    <small>Fuente: Wikipedia · "List of people who died climbing Mount Everest" · Altitudes y causas según registros históricos</small>
+  </div>
+
+</div>
+
+<!-- Modal overlay (móvil) -->
+<div id="modal-overlay">
+  <div id="modal-card">
+    <button id="modal-close" aria-label="Cerrar">&times;</button>
+    <div id="modal-name"></div>
+    <div id="modal-alt"></div>
+    <div id="modal-meta"></div>
+    <div id="modal-cause"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

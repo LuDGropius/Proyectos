@@ -1,0 +1,609 @@
+/* ============================================================
+   EVEREST DEATHS — style.css
+   Paleta: deep (#0d1117), ice (#c8dff0), danger (#c4302b)
+   Tipografía: Space Grotesk
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ice:    #c8dff0;
+  --snow:   #eef4f8;
+  --deep:   #0d1117;
+  --danger: #c4302b;
+  --muted:  #4a5a6e;
+  --accent: #4a9ebb;
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--deep);
+  color: var(--snow);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ---- Loading screen ---------------------------------------- */
+
+#load {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: opacity 0.5s;
+}
+
+#load.gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#load-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ice);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.3rem;
+}
+
+#load-txt {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+#load-bar-w {
+  width: 180px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#load-bar {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+
+/* ---- Progress bar (left edge) ------------------------------ */
+
+#prog {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 0%;
+  background: var(--danger);
+  z-index: 200;
+  transition: height 0.08s linear;
+}
+
+/* ---- Background canvas ------------------------------------- */
+
+#bgc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- HUD --------------------------------------------------- */
+
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(13, 17, 23, 0.7) 0%, transparent 100%);
+}
+
+#altimeter { text-align: right; }
+
+#alt-value {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ice);
+  font-variant-numeric: tabular-nums;
+}
+
+#alt-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+#zone-badge {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(196, 48, 43, 0.18);
+  color: #e07070;
+  border: 1px solid rgba(196, 48, 43, 0.3);
+}
+
+#death-counter { font-size: 0.75rem; color: var(--muted); }
+
+#death-count-num {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--danger);
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+#death-count-label {
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ---- Filtro por nacionalidad ---------------------------------- */
+
+#filter-bar {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 110;
+  pointer-events: auto;
+}
+
+#nationality-filter {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(200, 223, 240, 0.18);
+  border-radius: 20px;
+  color: var(--snow);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 7px 30px 7px 14px;
+  cursor: pointer;
+  text-align: center;
+  text-align-last: center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0L5 6L10 0Z' fill='%234a9ebb'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s;
+  max-width: 70vw;
+}
+
+#nationality-filter:hover,
+#nationality-filter:focus {
+  border-color: rgba(74, 158, 187, 0.5);
+  outline: none;
+}
+
+#nationality-filter option {
+  background: #0f141d;
+  color: var(--snow);
+}
+
+#nationality-filter.active {
+  border-color: rgba(74, 158, 187, 0.6);
+  background-color: rgba(74, 158, 187, 0.12);
+  color: var(--accent);
+}
+
+/* ---- Main scroll wrapper ----------------------------------- */
+
+#wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* ---- Intro section ----------------------------------------- */
+
+#intro {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+img{
+  max-width: 120px;
+  z-index: 1;
+  margin-bottom: 1rem;
+  @media (max-width: 576px) {
+    max-width: 80px;
+}
+}
+
+/* Silueta SVG del Everest: ocupa todo el viewport del intro,
+   anclada a la base. Los flancos son tan abiertos que la base
+   del SVG cubre toda la pantalla antes de llegar al fondo. */
+#everest-silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;       /* más ancho que el viewport para garantizar cobertura lateral */
+  height: 100%;      /* toda la altura del intro */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Canvas de nieve: fijo, siempre cayendo en toda la página */
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;        /* por encima del fondo, por debajo del contenido */
+}
+
+/* El texto del intro va por encima de la silueta y la nieve */
+#intro h1,
+#intro p,
+#scroll-hint {
+  position: relative;
+  z-index: 3;
+}
+
+#intro h1 {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+#intro h1 em {
+  color: var(--ice);
+  display: block;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 0.42em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+#intro p {
+  font-size: 0.95rem;
+  color:white;
+  max-width: 380px;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+#scroll-hint {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: pulse 2s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.9; }
+}
+
+/* ---- Mountain scroll area ---------------------------------- */
+
+#mtn {
+  position: relative;
+}
+
+#center-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: rgba(200, 223, 240, 0.04);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---- Altitude landmark labels ------------------------------ */
+
+.altitude-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(200, 223, 240, 0.35);
+  white-space: nowrap;
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+  margin-top: -1rem;
+}
+
+/* ---- Victim markers: puntos distribuidos en el eje X --------- */
+
+/* Contenedor de un cluster (grupo de víctimas a la misma altitud) */
+.vgroup {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Cada punto + su etiqueta de iniciales debajo */
+.dot-wrap {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+/* Cuando hay un filtro de nacionalidad activo: los que no coinciden
+   se atenúan pero siguen siendo visibles y clicables. */
+.dot-wrap.dimmed {
+  opacity: 0.16;
+}
+
+.dot-wrap.dimmed .dot {
+  box-shadow: none;
+}
+
+/* Los que sí coinciden con el filtro se destacan un poco más */
+.dot-wrap.highlighted .dot {
+  box-shadow: 0 0 10px rgba(196, 48, 43, 0.9), 0 0 18px rgba(196, 48, 43, 0.4);
+}
+
+.dot-wrap.highlighted .dot-label {
+  color: var(--ice);
+  font-weight: 500;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: none;
+  box-shadow: 0 0 6px rgba(196, 48, 43, 0.7);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.dot:hover,
+.dot:focus-visible {
+  transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(196, 48, 43, 0.95);
+  outline: none;
+}
+
+.dot-label {
+  margin-top: 3px;
+  font-size: 0.52rem;
+  letter-spacing: 0.03em;
+  color: rgba(200, 223, 240, 0.55);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.dot-wrap:hover .dot-label {
+  color: var(--ice);
+}
+
+/* ---- Modal overlay (detalle individual de víctima) ------------ */
+
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(5, 7, 11, 0.75);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+#modal-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+#modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #0f141d;
+  border: 1px solid rgba(200, 223, 240, 0.15);
+  border-radius: 10px;
+  padding: 1.4rem 1.3rem 1.3rem;
+  transform: scale(0.95) translateY(8px);
+  transition: transform 0.2s;
+}
+
+#modal-overlay.open #modal-card {
+  transform: scale(1) translateY(0);
+}
+
+#modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+
+#modal-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--snow);
+  margin-bottom: 2px;
+  padding-right: 1.5rem;
+}
+
+#modal-alt {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+#modal-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#modal-meta .mi { display: flex; flex-direction: column; gap: 2px; }
+#modal-meta .ml { font-size: 0.62rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+#modal-meta .mv { font-size: 0.85rem; color: var(--ice); font-variant-numeric: tabular-nums; }
+
+#modal-cause {
+  padding-top: 12px;
+  border-top: 1px solid rgba(200, 223, 240, 0.1);
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+#modal-cause span {
+  display: block;
+  color: rgba(200, 223, 240, 0.5);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+/* ---- Responsive: ajustes de tamaño en móvil ------------------- */
+
+@media (max-width: 768px) {
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .dot::after {
+    content: '';
+    position: absolute;
+    inset: -8px; /* área táctil ampliada sin agrandar el punto visual */
+  }
+
+  .dot-label { font-size: 0.58rem; }
+
+  #hud { padding: 0.8rem 1rem; }
+  #alt-value { font-size: 1.6rem; }
+
+  #filter-bar { top: auto; bottom: 1rem; }
+  #nationality-filter { font-size: 0.7rem; max-width: 80vw; }
+  #intro h1 { font-size: clamp(2rem, 11vw, 3.2rem); }
+  #intro p { font-size: 0.85rem; max-width: 300px; }
+}
+
+/* ---- End section ------------------------------------------- */
+
+#end {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+#end h2 {
+  font-size: clamp(1.3rem, 3vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+#end-total {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--danger);
+  letter-spacing: -0.04em;
+  margin: 0.5rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+#end p {
+  color: white;
+  max-width: 380px;
+  line-height: 1.6;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+#end small {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 0.65rem;
+  color: white;
+  letter-spacing: 0.05em;
+}
